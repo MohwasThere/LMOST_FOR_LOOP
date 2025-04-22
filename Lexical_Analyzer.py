@@ -1,7 +1,7 @@
 import re
 
 token_specification = [
-    ('KEYWORD', r'\b(for|int|float|double)\b'),
+    ('KEYWORD', r'\b(for|int|float)\b'),
     ('ID',       r'\b[a-zA-Z_][a-zA-Z_0-9]*\b'),
     ('NUM',      r'\b\d+\b'),
     ('OP',       r'[=+<]'),
