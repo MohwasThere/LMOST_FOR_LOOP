@@ -1,10 +1,10 @@
 import re
 
 token_specification = [
-    ('KEYWORD', r'\b(for|int|float|double)\b'),
+    ('KEYWORD', r'\b(for|int|float|double)\b'), #Reseverd Words/ KeyWords
     ('ID',       r'\b[a-zA-Z_][a-zA-Z_0-9]*\b'),
     ('NUM',      r'\b\d+\b'),
-    ('OP',       r'[=+<]'),
+    ('OP',       r'[=+<*>/]'),
     ('SYMBOL',   r'[{}();]'),
     ('SKIP',     r'[ \t]+'),   # Skip spaces and tabs
     ('NEWLINE',  r'\n'),
@@ -40,3 +40,7 @@ tokens = tokenize(source_code)
 print("Tokens:")
 for token in tokens:
     print(token)
+
+
+#Notes:::
+#Should we Handle #include shit wala la2a??
