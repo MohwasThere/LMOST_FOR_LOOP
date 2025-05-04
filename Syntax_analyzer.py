@@ -182,7 +182,7 @@ def main():
         pretty_print_ast(ast)
 
         # Save to JSON
-        with open("syntax_tree.json", "w") as f:
+        with open("AST.json", "w") as f:
             json.dump(ast, f, indent=4)
         print("\n✅ AST saved to syntax_tree.json")
 
