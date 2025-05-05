@@ -1,82 +1,71 @@
 import re
 
-token_specification = [
-    ('KEYWORD',     r'\b(for|int|float)\b'),
-    ('ID',          r'\b[a-zA-z_][a-zA-Z_0-9]*\b'),
-    ('CONSTANT',    r'\b\d+\b'),
-    ('OP',          r'[=+<*-/]'),
-    ('EQ',          r'=='),              # ==
-    ('NE',          r'!='),              # !=
-    ('LE',          r'<='),              # <=
-    ('GE',          r'>='),
-    ('SYMBOL',      r'[{}();]'),
-    ('SKIP',        r'[ \t]+'), # Skip spaces and tabs
-    ('NEWLINE',     r'\n'),
-    ('COMMENT',     r'//.*'), # Limited to single line comments
-    ]
 
-tok_regex = '|'.join(f'(?P<{name}>{pattern})' for name, pattern in token_specification)
+token_specification = [
+    ('COMMENT',     r'//.*'),           
+    ('NEWLINE',     r'\n'),             
+    ('SKIP',        r'[ \t]+'),         
+    ('KEYWORD',     r'\b(for|int|float)\b'), 
+    ('ID',          r'\b[a-zA-Z_][a-zA-Z_0-9]*\b'), 
+    ('NUMBER',      r'\b\d+(\.\d*)?\b|\.\d+\b'), 
+    ('OP',          r'[+\-*/]'),        
+    ('ASSIGN',      r'='),              
+    ('REL_OP',      r'==|!=|<=|>=|<|>'),
+    ('SYMBOL',      r'[{}();]'),        
+    ('MISMATCH',    r'.'),              
+]
+
+# Compile the regex for tokenization
+tok_regex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_specification)
 get_token = re.compile(tok_regex).match
 
-
-
-def tokenize(code):
+def lex(code):
+    """
+    Generates tokens from the source code string.
+    Yields (token_type, token_value) tuples.
+    """
+    line_num = 1
+    line_start = 0
     pos = 0
-    tokens = []
     while pos < len(code):
         match = get_token(code, pos)
-        if match:
-            kind = match.lastgroup
-            value = match.group()
-            if kind not in ['SKIP', 'COMMENT', 'NEWLINE']:
-                tokens.append((kind, value))
-            pos = match.end()
+        if not match:
+            raise SyntaxError(f'Unexpected character: {code[pos]} at line {line_num}, column {pos - line_start + 1}')
+
+        kind = match.lastgroup
+        value = match.group()
+        pos = match.end()
+
+        if kind == 'NEWLINE':
+            line_start = pos
+            line_num += 1
+        elif kind == 'SKIP' or kind == 'COMMENT':
+            continue
+        elif kind == 'MISMATCH':
+            raise SyntaxError(f'Unexpected character: {value} at line {line_num}, column {pos - match.start() - line_start + 1}')
         else:
-            raise SyntaxError(f'Unexpected character: {code[pos]}')
-    return tokens
+            yield (kind, value)
 
-def analyze(file_path):
-    tokens = []
 
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
+def main():
+    input_file = "input.txt"
+    print(f"📄 Running Lexical Analyzer standalone on {input_file}...")
+    try:
+        with open(input_file, 'r') as file:
+            source_code = file.read()
+    except FileNotFoundError:
+        print(f"❌ Error: Input file '{input_file}' not found.")
+        return
 
-    for line in lines:
-        line = line.strip()
+    print("\n📦 Tokens:")
+    try:
+        token_list = []
+        for token in lex(source_code):
+            print(f"  {token}")
+            token_list.append(token) 
+        print("\n✅ Lexical analysis successful.")
+    except SyntaxError as e:
+        print(f"\n❌ Syntax Error during lexical analysis: {e}")
 
-        # Add your logic here to tokenize each line
-        # Here's a dummy implementation for example:
-        words = line.replace('(', ' ( ').replace(')', ' ) ').replace('{', ' { ')\
-                    .replace('}', ' } ').replace(';', ' ; ').replace('=', ' = ')\
-                    .replace('+', ' + ').replace('-', ' - ').replace('*', ' * ')\
-                    .replace('/', ' / ').replace('<', ' < ').split()
-
-        for word in words:
-            if word in ['int', 'float', 'for']:
-                tokens.append((word, 'KEYWORD'))
-            elif word in ['(', ')', '{', '}', ';']:
-                tokens.append((word, 'SYMBOL'))
-            elif word in ['=', '+', '-', '*', '/', '<', '>', '==', '<=', '>=', '!=']:
-                tokens.append((word, 'OPERATOR'))
-            elif word.isdigit():
-                tokens.append((word, 'NUMBER'))
-            elif word.replace('.', '', 1).isdigit():
-                tokens.append((word, 'NUMBER'))
-            elif word.isidentifier():
-                tokens.append((word, 'IDENTIFIER'))
-            else:
-                tokens.append((word, 'UNKNOWN'))
-
-    return tokens
-
-try:
-    with open('input.txt', 'r') as file:
-        source_code = file.read()
-except FileNotFoundError:
-    print("File Was Not Found :(")
-
-tokens = tokenize(source_code)
-
-print("Tokens:")
-for token in tokens:
-    print(token)
+if __name__ == "__main__":
+    main()

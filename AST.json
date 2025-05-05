@@ -7,18 +7,34 @@
             "var_name": "i"
         },
         {
+            "type": "Declaration",
+            "var_type": "float",
+            "var_name": "x"
+        },
+        {
+            "type": "Assignment",
+            "var": "x",
+            "expr": {
+                "type": "Number",
+                "value": "5.1"
+            }
+        },
+        {
             "type": "ForLoop",
             "init": {
                 "type": "Assignment",
                 "var": "i",
                 "expr": {
                     "type": "Number",
-                    "value": "0"
+                    "value": "0.0"
                 }
             },
             "condition": {
                 "type": "Condition",
-                "left": "i",
+                "left": {
+                    "type": "Variable",
+                    "name": "i"
+                },
                 "op": "<",
                 "right": {
                     "type": "Number",
@@ -44,25 +60,25 @@
             "body": [
                 {
                     "type": "Assignment",
-                    "var": "i",
+                    "var": "x",
                     "expr": {
                         "type": "BinaryExpr",
-                        "op": "*",
+                        "op": "+",
                         "left": {
+                            "type": "Variable",
+                            "name": "i"
+                        },
+                        "right": {
                             "type": "BinaryExpr",
-                            "op": "+",
+                            "op": "*",
                             "left": {
                                 "type": "Variable",
-                                "name": "i"
+                                "name": "x"
                             },
                             "right": {
                                 "type": "Number",
-                                "value": "2"
+                                "value": "3"
                             }
-                        },
-                        "right": {
-                            "type": "Number",
-                            "value": "3"
                         }
                     }
                 }
