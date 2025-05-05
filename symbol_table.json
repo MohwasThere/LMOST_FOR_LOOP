@@ -3,8 +3,28 @@
         "type": "int",
         "initialized": true
     },
-    "x": {
+    "f": {
         "type": "float",
+        "initialized": true
+    },
+    "msg1": {
+        "type": "string",
+        "initialized": true
+    },
+    "msg2": {
+        "type": "string",
+        "initialized": true
+    },
+    "combined": {
+        "type": "string",
+        "initialized": true
+    },
+    "check": {
+        "type": "string",
+        "initialized": true
+    },
+    "temp": {
+        "type": "string",
         "initialized": true
     }
 }

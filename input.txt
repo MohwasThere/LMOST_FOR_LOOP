@@ -1,6 +1,27 @@
 int i;
-float x;
-x = 5.1;
-for (i = 0.0; i < 5; i = i + 1) {
-    x = i + x * 3;
+float f;
+string msg1;
+string msg2;
+string combined;
+
+i = 10;
+f = 2.5;
+msg1 = "Hello";
+msg2 = "World";
+
+combined = msg1 + " ";
+combined = combined + msg2;
+combined = combined + "!";
+
+string check;
+check = "Hello World!";
+
+string temp;
+for (i = 0; i < 2; i = i + 1) {
+  temp = "Loop";
+  temp = temp + "ing";
 }
+
+f = 3.14;
+msg1 = "End";
+

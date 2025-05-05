@@ -9,15 +9,120 @@
         {
             "type": "Declaration",
             "var_type": "float",
-            "var_name": "x"
+            "var_name": "f"
+        },
+        {
+            "type": "Declaration",
+            "var_type": "string",
+            "var_name": "msg1"
+        },
+        {
+            "type": "Declaration",
+            "var_type": "string",
+            "var_name": "msg2"
+        },
+        {
+            "type": "Declaration",
+            "var_type": "string",
+            "var_name": "combined"
         },
         {
             "type": "Assignment",
-            "var": "x",
+            "var": "i",
             "expr": {
                 "type": "Number",
-                "value": "5.1"
+                "value": "10"
             }
+        },
+        {
+            "type": "Assignment",
+            "var": "f",
+            "expr": {
+                "type": "Number",
+                "value": "2.5"
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "msg1",
+            "expr": {
+                "type": "StringLiteral",
+                "value": "\"Hello\""
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "msg2",
+            "expr": {
+                "type": "StringLiteral",
+                "value": "\"World\""
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "combined",
+            "expr": {
+                "type": "BinaryExpr",
+                "op": "+",
+                "left": {
+                    "type": "Variable",
+                    "name": "msg1"
+                },
+                "right": {
+                    "type": "StringLiteral",
+                    "value": "\" \""
+                }
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "combined",
+            "expr": {
+                "type": "BinaryExpr",
+                "op": "+",
+                "left": {
+                    "type": "Variable",
+                    "name": "combined"
+                },
+                "right": {
+                    "type": "Variable",
+                    "name": "msg2"
+                }
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "combined",
+            "expr": {
+                "type": "BinaryExpr",
+                "op": "+",
+                "left": {
+                    "type": "Variable",
+                    "name": "combined"
+                },
+                "right": {
+                    "type": "StringLiteral",
+                    "value": "\"!\""
+                }
+            }
+        },
+        {
+            "type": "Declaration",
+            "var_type": "string",
+            "var_name": "check"
+        },
+        {
+            "type": "Assignment",
+            "var": "check",
+            "expr": {
+                "type": "StringLiteral",
+                "value": "\"Hello World!\""
+            }
+        },
+        {
+            "type": "Declaration",
+            "var_type": "string",
+            "var_name": "temp"
         },
         {
             "type": "ForLoop",
@@ -26,7 +131,7 @@
                 "var": "i",
                 "expr": {
                     "type": "Number",
-                    "value": "0.0"
+                    "value": "0"
                 }
             },
             "condition": {
@@ -38,7 +143,7 @@
                 "op": "<",
                 "right": {
                     "type": "Number",
-                    "value": "5"
+                    "value": "2"
                 }
             },
             "update": {
@@ -60,29 +165,45 @@
             "body": [
                 {
                     "type": "Assignment",
-                    "var": "x",
+                    "var": "temp",
+                    "expr": {
+                        "type": "StringLiteral",
+                        "value": "\"Loop\""
+                    }
+                },
+                {
+                    "type": "Assignment",
+                    "var": "temp",
                     "expr": {
                         "type": "BinaryExpr",
                         "op": "+",
                         "left": {
                             "type": "Variable",
-                            "name": "i"
+                            "name": "temp"
                         },
                         "right": {
-                            "type": "BinaryExpr",
-                            "op": "*",
-                            "left": {
-                                "type": "Variable",
-                                "name": "x"
-                            },
-                            "right": {
-                                "type": "Number",
-                                "value": "3"
-                            }
+                            "type": "StringLiteral",
+                            "value": "\"ing\""
                         }
                     }
                 }
             ]
+        },
+        {
+            "type": "Assignment",
+            "var": "f",
+            "expr": {
+                "type": "Number",
+                "value": "3.14"
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "msg1",
+            "expr": {
+                "type": "StringLiteral",
+                "value": "\"End\""
+            }
         }
     ]
 }

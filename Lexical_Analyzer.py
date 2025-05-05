@@ -1,29 +1,24 @@
 import re
 
-
 token_specification = [
-    ('COMMENT',     r'//.*'),           
-    ('NEWLINE',     r'\n'),             
-    ('SKIP',        r'[ \t]+'),         
-    ('KEYWORD',     r'\b(for|int|float)\b'), 
-    ('ID',          r'\b[a-zA-Z_][a-zA-Z_0-9]*\b'), 
-    ('NUMBER',      r'\b\d+(\.\d*)?\b|\.\d+\b'), 
-    ('OP',          r'[+\-*/]'),        
-    ('ASSIGN',      r'='),              
+    ('COMMENT',     r'//.*'),
+    ('NEWLINE',     r'\n'),
+    ('SKIP',        r'[ \t]+'),
+    ('STRING_LITERAL', r'"(?:\\.|[^"\\])*"'),
+    ('KEYWORD',     r'\b(for|int|float|string)\b'),
+    ('ID',          r'\b[a-zA-Z_][a-zA-Z_0-9]*\b'),
+    ('NUMBER',      r'\b\d+(\.\d*)?\b|\.\d+\b'),
+    ('OP',          r'[+\-*/]'),
+    ('ASSIGN',      r'='),
     ('REL_OP',      r'==|!=|<=|>=|<|>'),
-    ('SYMBOL',      r'[{}();]'),        
-    ('MISMATCH',    r'.'),              
+    ('SYMBOL',      r'[{}();]'),
+    ('MISMATCH',    r'.'),
 ]
 
-# Compile the regex for tokenization
 tok_regex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_specification)
 get_token = re.compile(tok_regex).match
 
 def lex(code):
-    """
-    Generates tokens from the source code string.
-    Yields (token_type, token_value) tuples.
-    """
     line_num = 1
     line_start = 0
     pos = 0
@@ -46,26 +41,29 @@ def lex(code):
         else:
             yield (kind, value)
 
-
 def main():
     input_file = "input.txt"
-    print(f"📄 Running Lexical Analyzer standalone on {input_file}...")
+
+    print(f"Running Lexical Analyzer standalone on {input_file}...")
     try:
         with open(input_file, 'r') as file:
             source_code = file.read()
+            print("\n--- Source Code ---")
+            print(source_code)
+            print("-------------------\n")
     except FileNotFoundError:
-        print(f"❌ Error: Input file '{input_file}' not found.")
+        print(f"Error: Input file '{input_file}' not found.")
         return
 
-    print("\n📦 Tokens:")
+    print("Tokens:")
     try:
         token_list = []
         for token in lex(source_code):
             print(f"  {token}")
-            token_list.append(token) 
-        print("\n✅ Lexical analysis successful.")
+            token_list.append(token)
+        print("\nLexical analysis successful.")
     except SyntaxError as e:
-        print(f"\n❌ Syntax Error during lexical analysis: {e}")
+        print(f"\nSyntax Error during lexical analysis: {e}")
 
 if __name__ == "__main__":
     main()
