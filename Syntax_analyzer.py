@@ -123,7 +123,10 @@ class SyntaxAnalyzer:
     def parse_factor(self):
         token_type, token_value = self.current_token_info()
 
-        if self.match('SYMBOL', '('):
+        if self.match('OP', '-'):
+            operand = self.parse_factor()
+            return {"type": "UnaryExpr", "op": "-", "operand": operand}
+        elif self.match('SYMBOL', '('):
             expr = self.parse_expression()
             self.expect('SYMBOL', ')')
             return expr
@@ -134,7 +137,7 @@ class SyntaxAnalyzer:
         elif token_type == 'STRING_LITERAL':
             return {"type": "StringLiteral", "value": self.expect('STRING_LITERAL')}
         else:
-            raise SyntaxError(f"Unexpected token '{token_value}' ({token_type}) at position {self.pos}. Expected number, string, identifier, or '(' for an expression factor.")
+            raise SyntaxError(f"Unexpected token '{token_value}' ({token_type}) at position {self.pos}. Expected number, string, identifier, unary operator '-' or '(' for an expression factor.")
 
     def parse_term(self):
         node = self.parse_factor()

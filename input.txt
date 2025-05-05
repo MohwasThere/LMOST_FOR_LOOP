@@ -4,8 +4,9 @@ string msg1;
 string msg2;
 string combined;
 
-i = 10;
+i = 11;
 f = 2.5;
+i = i-1;
 msg1 = "Hello";
 msg2 = "World";
 

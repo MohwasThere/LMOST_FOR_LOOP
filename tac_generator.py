@@ -123,6 +123,22 @@ class TACGenerator:
 
         return result_temp
 
+    def visit_UnaryExpr(self, node):
+        op = node.get("op")
+        operand_result = self.visit(node.get("operand"))
+
+        if operand_result is None:
+            print(f"Warning: Operand for unary '{op}' was None. Skipping instruction.")
+            return self.new_temp()
+
+        if op == '-':
+            result_temp = self.new_temp()
+            self.add_instruction('UMINUS', operand_result, None, result_temp)
+            return result_temp
+        else:
+            print(f"Warning: Unsupported unary operator '{op}' skipped in TAC gen.")
+            return operand_result
+
     def visit_Variable(self, node):
         return node.get('name')
 
@@ -254,6 +270,8 @@ def main():
                 line = f"{i:03d}: {arg1_str}:"
             elif op == "ASSIGN":
                 line = f"{i:03d}:  {result_str} = {arg1_str}"
+            elif op == "UMINUS":
+                 line = f"{i:03d}:  {result_str} = - {arg1_str}"
             elif op in ['ADD', 'SUB', 'MUL', 'DIV', 'CONCAT']:
                 op_symbol = {'ADD':'+', 'SUB':'-', 'MUL':'*', 'DIV':'/', 'CONCAT': '+'}.get(op, op)
                 line = f"{i:03d}:  {result_str} = {arg1_str} {op_symbol} {arg2_str}"

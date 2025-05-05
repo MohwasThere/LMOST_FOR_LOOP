@@ -144,6 +144,16 @@ class SemanticAnalyzer:
             else:
                  self.errors.append(f"Error: Unknown binary operator '{op}'.")
 
+    def visit_UnaryExpr(self, node):
+        op = node.get("op")
+        operand_node = node.get("operand")
+
+        if op == '-':
+            operand_type = self.get_expression_type(operand_node)
+            if operand_type not in ['int', 'float']:
+                self.errors.append(f"Error: Unary operator '-' cannot be applied to type '{operand_type}'.")
+        else:
+             self.errors.append(f"Internal Error: Unsupported unary operator '{op}'.")
 
     def visit_Variable(self, node):
         var_name = node.get("name")
@@ -193,6 +203,13 @@ class SemanticAnalyzer:
                 return "Unknown"
         elif node_type == "StringLiteral":
             return "string"
+        elif node_type == "UnaryExpr":
+            op = expr_node.get("op")
+            operand_type = self.get_expression_type(expr_node.get("operand"))
+            if op == '-' and operand_type in ['int', 'float']:
+                return operand_type
+            else:
+                return "Unknown"
         else:
             return "Unknown"
 

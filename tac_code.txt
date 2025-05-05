@@ -1,29 +1,31 @@
 .code
-000:  i = 10
+000:  i = 11
 001:  f = 2.5
-002:  msg1 = _str0
-003:  msg2 = _str1
-004:  t0 = msg1 + _str2
-005:  combined = t0
-006:  t1 = combined + msg2
+002:  t0 = i - 1
+003:  i = t0
+004:  msg1 = _str0
+005:  msg2 = _str1
+006:  t1 = msg1 + _str2
 007:  combined = t1
-008:  t2 = combined + _str3
+008:  t2 = combined + msg2
 009:  combined = t2
-010:  check = _str4
-011:  i = 0
-012: L0:
-013:  if i < 2 goto L1
-014:  goto L2
-015: L1:
-016:  temp = _str5
-017:  t3 = temp + _str6
-018:  temp = t3
-019:  t4 = i + 1
-020:  i = t4
-021:  goto L0
-022: L2:
-023:  f = 3.14
-024:  msg1 = _str7
+010:  t3 = combined + _str3
+011:  combined = t3
+012:  check = _str4
+013:  i = 0
+014: L0:
+015:  if i < 2 goto L1
+016:  goto L2
+017: L1:
+018:  temp = _str5
+019:  t4 = temp + _str6
+020:  temp = t4
+021:  t5 = i + 1
+022:  i = t5
+023:  goto L0
+024: L2:
+025:  f = 3.14
+026:  msg1 = _str7
 .data
 _str0: .asciiz "Hello"
 _str1: .asciiz "World"
