@@ -3,7 +3,9 @@ float f;
 string msg1;
 string msg2;
 string combined;
+char s;
 
+s='a';
 i = 11;
 f = 2.5;
 i = i-1;

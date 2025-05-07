@@ -1,37 +1,29 @@
 .code
-000:  i = 11
-001:  f = 2.5
-002:  t0 = i - 1
-003:  i = t0
-004:  msg1 = _str0
-005:  msg2 = _str1
-006:  t1 = msg1 + _str2
-007:  combined = t1
-008:  t2 = combined + msg2
-009:  combined = t2
-010:  t3 = combined + _str3
-011:  combined = t3
-012:  check = _str4
-013:  i = 0
-014: L0:
-015:  if i < 2 goto L1
-016:  goto L2
-017: L1:
-018:  temp = _str5
-019:  t4 = temp + _str6
-020:  temp = t4
-021:  t5 = i + 1
-022:  i = t5
-023:  goto L0
-024: L2:
-025:  f = 3.14
-026:  msg1 = _str7
-.data
-_str0: .asciiz "Hello"
-_str1: .asciiz "World"
-_str2: .asciiz " "
-_str3: .asciiz "!"
-_str4: .asciiz "Hello World!"
-_str5: .asciiz "Loop"
-_str6: .asciiz "ing"
-_str7: .asciiz "End"
+000:  s = 97
+001:  i = 11
+002:  f = 2.5
+003:  t0 = i - 1
+004:  i = t0
+005:  msg1 = _str0
+006:  msg2 = _str1
+007:  t1 = msg1 + _str2
+008:  combined = t1
+009:  t2 = combined + msg2
+010:  combined = t2
+011:  t3 = combined + _str3
+012:  combined = t3
+013:  check = _str4
+014:  i = 0
+015:  L0:
+016:  t4 = i < 2
+017:  if_false t4 goto L2
+018:  L1:
+019:  temp = _str5
+020:  t5 = temp + _str6
+021:  temp = t5
+022:  t6 = i + 1
+023:  i = t6
+024:  goto L0
+025:  L2:
+026:  f = 3.14
+027:  msg1 = _str7

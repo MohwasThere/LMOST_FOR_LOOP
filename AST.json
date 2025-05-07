@@ -27,6 +27,19 @@
             "var_name": "combined"
         },
         {
+            "type": "Declaration",
+            "var_type": "char",
+            "var_name": "s"
+        },
+        {
+            "type": "Assignment",
+            "var": "s",
+            "expr": {
+                "type": "CharLiteral",
+                "value": "'a'"
+            }
+        },
+        {
             "type": "Assignment",
             "var": "i",
             "expr": {
