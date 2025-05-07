@@ -4,154 +4,57 @@
         {
             "type": "Declaration",
             "var_type": "int",
-            "var_name": "i"
+            "var_name": "x"
         },
         {
             "type": "Declaration",
-            "var_type": "float",
-            "var_name": "f"
-        },
-        {
-            "type": "Declaration",
-            "var_type": "string",
-            "var_name": "msg1"
-        },
-        {
-            "type": "Declaration",
-            "var_type": "string",
-            "var_name": "msg2"
-        },
-        {
-            "type": "Declaration",
-            "var_type": "string",
-            "var_name": "combined"
-        },
-        {
-            "type": "Declaration",
-            "var_type": "char",
-            "var_name": "s"
+            "var_type": "int",
+            "var_name": "y"
         },
         {
             "type": "Assignment",
-            "var": "s",
-            "expr": {
-                "type": "CharLiteral",
-                "value": "'a'"
-            }
-        },
-        {
-            "type": "Assignment",
-            "var": "i",
+            "var": "x",
             "expr": {
                 "type": "Number",
-                "value": "11"
+                "value": "5"
             }
         },
         {
             "type": "Assignment",
-            "var": "f",
+            "var": "x",
             "expr": {
                 "type": "Number",
-                "value": "2.5"
+                "value": "10"
             }
         },
         {
             "type": "Assignment",
-            "var": "i",
+            "var": "y",
             "expr": {
                 "type": "BinaryExpr",
-                "op": "-",
+                "op": "*",
                 "left": {
                     "type": "Variable",
-                    "name": "i"
+                    "name": "x"
                 },
                 "right": {
                     "type": "Number",
-                    "value": "1"
+                    "value": "2"
                 }
             }
         },
         {
             "type": "Assignment",
-            "var": "msg1",
+            "var": "x",
             "expr": {
-                "type": "StringLiteral",
-                "value": "\"Hello\""
-            }
-        },
-        {
-            "type": "Assignment",
-            "var": "msg2",
-            "expr": {
-                "type": "StringLiteral",
-                "value": "\"World\""
-            }
-        },
-        {
-            "type": "Assignment",
-            "var": "combined",
-            "expr": {
-                "type": "BinaryExpr",
-                "op": "+",
-                "left": {
-                    "type": "Variable",
-                    "name": "msg1"
-                },
-                "right": {
-                    "type": "StringLiteral",
-                    "value": "\" \""
-                }
-            }
-        },
-        {
-            "type": "Assignment",
-            "var": "combined",
-            "expr": {
-                "type": "BinaryExpr",
-                "op": "+",
-                "left": {
-                    "type": "Variable",
-                    "name": "combined"
-                },
-                "right": {
-                    "type": "Variable",
-                    "name": "msg2"
-                }
-            }
-        },
-        {
-            "type": "Assignment",
-            "var": "combined",
-            "expr": {
-                "type": "BinaryExpr",
-                "op": "+",
-                "left": {
-                    "type": "Variable",
-                    "name": "combined"
-                },
-                "right": {
-                    "type": "StringLiteral",
-                    "value": "\"!\""
-                }
+                "type": "Number",
+                "value": "5"
             }
         },
         {
             "type": "Declaration",
-            "var_type": "string",
-            "var_name": "check"
-        },
-        {
-            "type": "Assignment",
-            "var": "check",
-            "expr": {
-                "type": "StringLiteral",
-                "value": "\"Hello World!\""
-            }
-        },
-        {
-            "type": "Declaration",
-            "var_type": "string",
-            "var_name": "temp"
+            "var_type": "int",
+            "var_name": "i"
         },
         {
             "type": "ForLoop",
@@ -172,7 +75,7 @@
                 "op": "<",
                 "right": {
                     "type": "Number",
-                    "value": "2"
+                    "value": "10"
                 }
             },
             "update": {
@@ -193,46 +96,27 @@
             },
             "body": [
                 {
-                    "type": "Assignment",
-                    "var": "temp",
-                    "expr": {
-                        "type": "StringLiteral",
-                        "value": "\"Loop\""
-                    }
+                    "type": "Declaration",
+                    "var_type": "int",
+                    "var_name": "temp"
                 },
                 {
                     "type": "Assignment",
                     "var": "temp",
                     "expr": {
                         "type": "BinaryExpr",
-                        "op": "+",
+                        "op": "*",
                         "left": {
                             "type": "Variable",
-                            "name": "temp"
+                            "name": "i"
                         },
                         "right": {
-                            "type": "StringLiteral",
-                            "value": "\"ing\""
+                            "type": "Number",
+                            "value": "2"
                         }
                     }
                 }
             ]
-        },
-        {
-            "type": "Assignment",
-            "var": "f",
-            "expr": {
-                "type": "Number",
-                "value": "3.14"
-            }
-        },
-        {
-            "type": "Assignment",
-            "var": "msg1",
-            "expr": {
-                "type": "StringLiteral",
-                "value": "\"End\""
-            }
         }
     ]
 }

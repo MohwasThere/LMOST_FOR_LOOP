@@ -1,30 +1,16 @@
+int x;
+int y;
+
+x = 5;
+x = 10;
+y = x * 2;
+
+x = 5;
+
 int i;
-float f;
-string msg1;
-string msg2;
-string combined;
-char s;
 
-s='a';
-i = 11;
-f = 2.5;
-i = i-1;
-msg1 = "Hello";
-msg2 = "World";
-
-combined = msg1 + " ";
-combined = combined + msg2;
-combined = combined + "!";
-
-string check;
-check = "Hello World!";
-
-string temp;
-for (i = 0; i < 2; i = i + 1) {
-  temp = "Loop";
-  temp = temp + "ing";
+for (i = 0; i < 10; i = i + 1)
+{
+int temp;
+temp = i * 2;
 }
-
-f = 3.14;
-msg1 = "End";
-

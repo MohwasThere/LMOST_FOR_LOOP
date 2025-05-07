@@ -1,50 +1,26 @@
 {
+    "x": {
+        "type": "int",
+        "initialized": true,
+        "value": 5,
+        "scope": 0
+    },
+    "y": {
+        "type": "int",
+        "initialized": true,
+        "value": null,
+        "scope": 0
+    },
     "i": {
         "type": "int",
         "initialized": true,
         "value": null,
         "scope": 0
     },
-    "f": {
-        "type": "float",
-        "initialized": true,
-        "value": 3.14,
-        "scope": 0
-    },
-    "msg1": {
-        "type": "string",
-        "initialized": true,
-        "value": "End",
-        "scope": 0
-    },
-    "msg2": {
-        "type": "string",
-        "initialized": true,
-        "value": "World",
-        "scope": 0
-    },
-    "combined": {
-        "type": "string",
-        "initialized": true,
-        "value": null,
-        "scope": 0
-    },
-    "s": {
-        "type": "char",
-        "initialized": true,
-        "value": "a",
-        "scope": 0
-    },
-    "check": {
-        "type": "string",
-        "initialized": true,
-        "value": "Hello World!",
-        "scope": 0
-    },
     "temp": {
-        "type": "string",
+        "type": "int",
         "initialized": true,
         "value": null,
-        "scope": 0
+        "scope": 1
     }
 }
