@@ -34,18 +34,24 @@ class SemanticAnalyzer:
             print(f"Warning (Semantic Analyzer): Skipping unknown node structure: {type(node)} {str(node)[:100]}")
 
     def generic_visit(self, node):
+
         """Generic visitor for dictionary nodes not handled by specific visitors."""
+
         if isinstance(node, dict):
             for key, value in node.items():
                 if isinstance(value, (dict, list)):
                     self.visit(value)
 
     def visit_Program(self, node):
+
         """Visits the Program node."""
+
         self.visit(node.get('body', []))
 
     def visit_Declaration(self, node):
+
         """Visits a Declaration node, adding variables to the symbol table."""
+
         var_name = node.get("var_name")
         var_type = node.get("var_type")
 
@@ -65,8 +71,10 @@ class SemanticAnalyzer:
             self.symbol_table[var_name] = {"type": var_type, "initialized": False, "value": None, "scope": self.current_scope_level} 
 
     def visit_Assignment(self, node):
+
         """Visits an Assignment node, checking types and variable declaration.
            Updates variable's value in symbol table if assigned a literal."""
+        
         var_name = node.get("var")
         expression_node = node.get("expr")
 

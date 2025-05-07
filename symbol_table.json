@@ -1,0 +1,26 @@
+{
+    "x": {
+        "type": "int",
+        "initialized": true,
+        "value": 5,
+        "scope": 0
+    },
+    "y": {
+        "type": "int",
+        "initialized": true,
+        "value": null,
+        "scope": 0
+    },
+    "i": {
+        "type": "int",
+        "initialized": true,
+        "value": null,
+        "scope": 0
+    },
+    "temp": {
+        "type": "int",
+        "initialized": true,
+        "value": null,
+        "scope": 1
+    }
+}

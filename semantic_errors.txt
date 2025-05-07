@@ -1,1 +1,4 @@
+- Semantic Error: Type mismatch in assignment to 'i'. Cannot assign 'double' to 'int'.
+- Semantic Error: Literal value '11.1' (Python type: float) is not directly storable as declared type 'int' for variable 'i'.
 - Semantic Error: Variable 'h' is not declared before assignment.
+- Semantic Error: Variable 'batates' used before declaration.

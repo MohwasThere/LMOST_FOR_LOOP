@@ -2,8 +2,6 @@ class TACOptimizer:
     def __init__(self, tac):
         self.original_tac = tac
         self.optimized_tac = []
-        self.constants = {}
-        self.expr_map = {}
 
     def optimize(self):
         tac = self.constant_folding(self.original_tac)
@@ -11,7 +9,6 @@ class TACOptimizer:
         tac = self.common_subexpression_elimination(tac)
         tac = self.strength_reduction(tac)
         tac = self.dead_code_elimination(tac)
-        # More passes can be added here
         self.optimized_tac = tac
         return tac
 
@@ -30,6 +27,7 @@ class TACOptimizer:
         const_vals = {}
         new_tac = []
         for instr in tac:
+            instr = instr.copy()
             if instr['op'] == 'ASSIGN' and isinstance(instr['arg1'], (int, float)):
                 const_vals[instr['result']] = instr['arg1']
             for key in ['arg1', 'arg2']:
@@ -56,22 +54,23 @@ class TACOptimizer:
     def strength_reduction(self, tac):
         new_tac = []
         for instr in tac:
-            if instr['op'] == 'MUL':
-                if instr['arg2'] == 2:
-                    new_tac.append({'op': 'ADD', 'arg1': instr['arg1'], 'arg2': instr['arg1'], 'result': instr['result']})
-                    continue
+            if instr['op'] == 'MUL' and instr['arg2'] == 2:
+                new_tac.append({'op': 'ADD', 'arg1': instr['arg1'], 'arg2': instr['arg1'], 'result': instr['result']})
+                continue
             new_tac.append(instr)
         return new_tac
 
     def dead_code_elimination(self, tac):
         used = set()
         for instr in tac:
-            if instr['arg1']: used.add(instr['arg1'])
-            if instr['arg2']: used.add(instr['arg2'])
+            if instr.get('arg1') is not None:
+                used.add(instr['arg1'])
+            if instr.get('arg2') is not None:
+                used.add(instr['arg2'])
 
         new_tac = []
         for instr in reversed(tac):
-            if instr['result'] in used or instr['op'] == 'LABEL':
+            if instr['op'] == 'LABEL' or instr.get('result') in used or instr['op'] == 'ASSIGN':
                 new_tac.insert(0, instr)
         return new_tac
 

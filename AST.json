@@ -1,0 +1,122 @@
+{
+    "type": "Program",
+    "body": [
+        {
+            "type": "Declaration",
+            "var_type": "int",
+            "var_name": "x"
+        },
+        {
+            "type": "Declaration",
+            "var_type": "int",
+            "var_name": "y"
+        },
+        {
+            "type": "Assignment",
+            "var": "x",
+            "expr": {
+                "type": "Number",
+                "value": "5"
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "x",
+            "expr": {
+                "type": "Number",
+                "value": "10"
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "y",
+            "expr": {
+                "type": "BinaryExpr",
+                "op": "*",
+                "left": {
+                    "type": "Variable",
+                    "name": "x"
+                },
+                "right": {
+                    "type": "Number",
+                    "value": "2"
+                }
+            }
+        },
+        {
+            "type": "Assignment",
+            "var": "x",
+            "expr": {
+                "type": "Number",
+                "value": "5"
+            }
+        },
+        {
+            "type": "Declaration",
+            "var_type": "int",
+            "var_name": "i"
+        },
+        {
+            "type": "ForLoop",
+            "init": {
+                "type": "Assignment",
+                "var": "i",
+                "expr": {
+                    "type": "Number",
+                    "value": "0"
+                }
+            },
+            "condition": {
+                "type": "Condition",
+                "left": {
+                    "type": "Variable",
+                    "name": "i"
+                },
+                "op": "<",
+                "right": {
+                    "type": "Number",
+                    "value": "10"
+                }
+            },
+            "update": {
+                "type": "Assignment",
+                "var": "i",
+                "expr": {
+                    "type": "BinaryExpr",
+                    "op": "+",
+                    "left": {
+                        "type": "Variable",
+                        "name": "i"
+                    },
+                    "right": {
+                        "type": "Number",
+                        "value": "1"
+                    }
+                }
+            },
+            "body": [
+                {
+                    "type": "Declaration",
+                    "var_type": "int",
+                    "var_name": "temp"
+                },
+                {
+                    "type": "Assignment",
+                    "var": "temp",
+                    "expr": {
+                        "type": "BinaryExpr",
+                        "op": "*",
+                        "left": {
+                            "type": "Variable",
+                            "name": "i"
+                        },
+                        "right": {
+                            "type": "Number",
+                            "value": "2"
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

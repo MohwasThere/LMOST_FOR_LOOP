@@ -1,0 +1,146 @@
+--- Leftmost Derivation Log ---
+Start Symbol: <Program>
+  Applying rule: Program -> StmtList
+    StmtList -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Declaration
+        Applying rule: Declaration -> Type ID ;
+        Match terminal: 'int' (Type: KEYWORD)
+        Match terminal: 'x' (Type: ID)
+        Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Declaration
+        Applying rule: Declaration -> Type ID ;
+        Match terminal: 'int' (Type: KEYWORD)
+        Match terminal: 'y' (Type: ID)
+        Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Assignment ;
+        Applying rule: Assignment -> ID = Expression
+        Match terminal: 'x' (Type: ID)
+        Match terminal: '=' (Type: ASSIGN)
+          Applying rule: Expression -> Term Expression'
+            Applying rule: Term -> Factor Term'
+              Applying rule: Factor -> NUMBER
+              Match terminal: '5' (Type: NUMBER)
+              Applying rule: Term' -> ε
+            Applying rule: Expression' -> ε
+      Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Assignment ;
+        Applying rule: Assignment -> ID = Expression
+        Match terminal: 'x' (Type: ID)
+        Match terminal: '=' (Type: ASSIGN)
+          Applying rule: Expression -> Term Expression'
+            Applying rule: Term -> Factor Term'
+              Applying rule: Factor -> NUMBER
+              Match terminal: '10' (Type: NUMBER)
+              Applying rule: Term' -> ε
+            Applying rule: Expression' -> ε
+      Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Assignment ;
+        Applying rule: Assignment -> ID = Expression
+        Match terminal: 'y' (Type: ID)
+        Match terminal: '=' (Type: ASSIGN)
+          Applying rule: Expression -> Term Expression'
+            Applying rule: Term -> Factor Term'
+              Applying rule: Factor -> ID
+              Match terminal: 'x' (Type: ID)
+              Applying rule: Term' -> * Factor Term'
+              Match terminal: '*' (Type: OP)
+                Applying rule: Factor -> NUMBER
+                Match terminal: '2' (Type: NUMBER)
+              Applying rule: Term' -> ε
+            Applying rule: Expression' -> ε
+      Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Assignment ;
+        Applying rule: Assignment -> ID = Expression
+        Match terminal: 'x' (Type: ID)
+        Match terminal: '=' (Type: ASSIGN)
+          Applying rule: Expression -> Term Expression'
+            Applying rule: Term -> Factor Term'
+              Applying rule: Factor -> NUMBER
+              Match terminal: '5' (Type: NUMBER)
+              Applying rule: Term' -> ε
+            Applying rule: Expression' -> ε
+      Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Declaration
+        Applying rule: Declaration -> Type ID ;
+        Match terminal: 'int' (Type: KEYWORD)
+        Match terminal: 'i' (Type: ID)
+        Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> ForLoop
+        Applying rule: ForLoop -> 'for' '(' Assignment ';' Condition ';' Assignment ')' '{' StmtList '}'
+        Match terminal: 'for' (Type: KEYWORD)
+        Match terminal: '(' (Type: SYMBOL)
+          Applying rule: Assignment -> ID = Expression
+          Match terminal: 'i' (Type: ID)
+          Match terminal: '=' (Type: ASSIGN)
+            Applying rule: Expression -> Term Expression'
+              Applying rule: Term -> Factor Term'
+                Applying rule: Factor -> NUMBER
+                Match terminal: '0' (Type: NUMBER)
+                Applying rule: Term' -> ε
+              Applying rule: Expression' -> ε
+        Match terminal: ';' (Type: SYMBOL)
+            Applying rule: Expression -> Term Expression'
+              Applying rule: Term -> Factor Term'
+                Applying rule: Factor -> ID
+                Match terminal: 'i' (Type: ID)
+                Applying rule: Term' -> ε
+              Applying rule: Expression' -> ε
+          Applying rule: Condition -> Expression RelOp Expression
+          Match terminal: '<' (Type: REL_OP)
+            Applying rule: Expression -> Term Expression'
+              Applying rule: Term -> Factor Term'
+                Applying rule: Factor -> NUMBER
+                Match terminal: '10' (Type: NUMBER)
+                Applying rule: Term' -> ε
+              Applying rule: Expression' -> ε
+        Match terminal: ';' (Type: SYMBOL)
+          Applying rule: Assignment -> ID = Expression
+          Match terminal: 'i' (Type: ID)
+          Match terminal: '=' (Type: ASSIGN)
+            Applying rule: Expression -> Term Expression'
+              Applying rule: Term -> Factor Term'
+                Applying rule: Factor -> ID
+                Match terminal: 'i' (Type: ID)
+                Applying rule: Term' -> ε
+              Applying rule: Expression' -> + Term Expression'
+              Match terminal: '+' (Type: OP)
+                Applying rule: Term -> Factor Term'
+                  Applying rule: Factor -> NUMBER
+                  Match terminal: '1' (Type: NUMBER)
+                  Applying rule: Term' -> ε
+              Applying rule: Expression' -> ε
+        Match terminal: ')' (Type: SYMBOL)
+        Match terminal: '{' (Type: SYMBOL)
+          StmtList -> Stmt StmtList_Tail
+            Applying rule: Stmt -> Declaration
+              Applying rule: Declaration -> Type ID ;
+              Match terminal: 'int' (Type: KEYWORD)
+              Match terminal: 'temp' (Type: ID)
+              Match terminal: ';' (Type: SYMBOL)
+          StmtList_Tail -> Stmt StmtList_Tail
+            Applying rule: Stmt -> Assignment ;
+              Applying rule: Assignment -> ID = Expression
+              Match terminal: 'temp' (Type: ID)
+              Match terminal: '=' (Type: ASSIGN)
+                Applying rule: Expression -> Term Expression'
+                  Applying rule: Term -> Factor Term'
+                    Applying rule: Factor -> ID
+                    Match terminal: 'i' (Type: ID)
+                    Applying rule: Term' -> * Factor Term'
+                    Match terminal: '*' (Type: OP)
+                      Applying rule: Factor -> NUMBER
+                      Match terminal: '2' (Type: NUMBER)
+                    Applying rule: Term' -> ε
+                  Applying rule: Expression' -> ε
+            Match terminal: ';' (Type: SYMBOL)
+          StmtList_Tail -> ε (found '}')
+        Match terminal: '}' (Type: SYMBOL)
+    StmtList_Tail -> ε (end of input)
+------------------------------
