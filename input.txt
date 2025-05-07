@@ -1,4 +1,35 @@
 int i;
+<<<<<<< Updated upstream
 for (i = 0; i < 5; i = i + 1) {
     i = (i + 2) * 3;
 }
+=======
+float f;
+string msg1;
+string msg2;
+string combined;
+char s;
+
+s = 'a';
+i = 11;
+f = 2.5;
+i = i-1;
+msg1 = "Hello";
+msg2 = "World";
+
+combined = msg1 + " ";
+combined = combined + msg2;
+combined = combined + "!";
+
+string check;
+check = "Hello World!";
+
+string temp;
+for (i = 0; i < 2; i = i + 1) {
+  temp = "Loop";
+  temp = temp + "ing";
+}
+
+f = 3.14;
+msg1 = "End"; 
+>>>>>>> Stashed changes
