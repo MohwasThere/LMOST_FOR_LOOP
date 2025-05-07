@@ -20,6 +20,7 @@ tok_regex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_specification
 get_token = re.compile(tok_regex).match
 
 def lex(code):
+
     """
     Generates a stream of tokens from the input source code.
     Args:
@@ -29,6 +30,7 @@ def lex(code):
     Raises:
         SyntaxError: If an unexpected character is encountered.
     """
+
     line_num = 1
     line_start = 0
     pos = 0
@@ -44,9 +46,12 @@ def lex(code):
         if kind == 'NEWLINE':
             line_start = pos
             line_num += 1
+
         elif kind == 'SKIP' or kind == 'COMMENT':
             continue
+        
         elif kind == 'MISMATCH':
             raise SyntaxError(f'Unexpected character: {value} at line {line_num}, column {pos - match_obj.start() - line_start + 1}')
+        
         else:
             yield (kind, value)

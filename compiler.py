@@ -6,7 +6,8 @@ import os
 from Lexical_Analyzer import lex
 from Syntax_analyzer import SyntaxAnalyzer, pretty_print_ast, visualize_ast_with_anytree, ANYTREE_AVAILABLE
 from Semantic_analyzer import SemanticAnalyzer 
-from TAC_Generator import TACGenerator 
+from tac_generator import TACGenerator 
+from tac_optimizer import TACOptimizer  # <-- Added optimizer import
 
 def main():
     """
@@ -109,6 +110,11 @@ def main():
     try:
         tac_generator = TACGenerator()
         tac_instructions, string_data_map = tac_generator.generate(ast) 
+
+        # Apply optimizations
+        optimizer = TACOptimizer(tac_instructions)
+        tac_instructions = optimizer.optimize()
+
         output_lines = []
         output_lines.append(".code") 
 
