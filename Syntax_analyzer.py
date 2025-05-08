@@ -127,20 +127,37 @@ class SyntaxAnalyzer:
 
     def parse_declaration(self):
         self.indent_level += 1
-        self._log("Applying rule: Declaration -> Type ID ;")
-        
+        self._log("Applying rule: Declaration -> Type ID [= Expression] ;")
+
         var_type_token = self.expect('KEYWORD') 
         supported_types = ['int', 'float', 'string', 'double', 'char', 'bool']
         if var_type_token not in supported_types:
-            err_msg = f"Expected type ({', '.join(supported_types)}) but found '{var_type_token}' at position {self.pos-1}"
-            if self.log_derivation_enabled:
-                self.derivation_steps.append("  " * self.indent_level + f"ERROR: {err_msg}")
-            raise SyntaxError(err_msg)
-        
+            raise SyntaxError(f"Expected type but found '{var_type_token}'")
+
         var_name = self.expect('ID')
+
+        initializer = None
+        if self.match('ASSIGN', '='):
+            self._log("Detected initializer in declaration.")
+            initializer = self.parse_expression()
+
         self.expect('SYMBOL', ';')
         self.indent_level -= 1
-        return {"type": "Declaration", "var_type": var_type_token, "var_name": var_name}
+
+        if initializer:
+            return {
+                "type": "Declaration",
+                "var_type": var_type_token,
+                "var_name": var_name,
+                "initializer": initializer
+            }
+        else:
+            return {
+                "type": "Declaration",
+                "var_type": var_type_token,
+                "var_name": var_name
+            }
+
 
     def parse_for_loop(self):
         self.indent_level += 1
