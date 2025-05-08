@@ -49,26 +49,24 @@ class SemanticAnalyzer:
         self.visit(node.get('body', []))
 
     def visit_Declaration(self, node):
-
-        """Visits a Declaration node, adding variables to the symbol table."""
-
         var_name = node.get("var_name")
         var_type = node.get("var_type")
+        initializer = node.get("initializer", None)
 
-        supported_types = ['int', 'float', 'string', 'double', 'char', 'bool']
-
-        if not var_name or not var_type:
-            self.errors.append(f"Semantic Error: Invalid declaration node structure: {node}")
-            return
-
-        if var_name in self.declared_vars: 
-            self.errors.append(f"Semantic Error: Variable '{var_name}' is already declared.")
+        # declare
+        if var_name in self.declared_vars:
+            self.errors.append(f"Semantic Error: Variable '{var_name}' already declared.")
         else:
-            if var_type not in supported_types: 
-                self.errors.append(f"Semantic Error: Unsupported declaration type '{var_type}' for '{var_name}'. Supported types are: {supported_types}")
-                return
             self.declared_vars.add(var_name)
-            self.symbol_table[var_name] = {"type": var_type, "initialized": False, "value": None, "scope": self.current_scope_level} 
+            self.symbol_table[var_name] = {
+                "type": var_type, "initialized": False, "value": None, "scope": self.current_scope_level
+            }
+
+        # if initializer exists
+        if initializer:
+            fake_assignment = {"type": "Assignment", "var": var_name, "expr": initializer}
+            self.visit_Assignment(fake_assignment)
+
 
     def visit_Assignment(self, node):
 

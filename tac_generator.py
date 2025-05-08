@@ -67,7 +67,10 @@ class TACGenerator:
         return None 
 
     def visit_Declaration(self, node):
-        return None
+        if 'initializer' in node:
+            fake_assignment = {"type": "Assignment", "var": node['var_name'], "expr": node['initializer']}
+            self.visit_Assignment(fake_assignment)
+
 
     def visit_Assignment(self, node):
         var_name = node.get('var')

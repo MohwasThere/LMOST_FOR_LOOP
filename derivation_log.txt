@@ -3,28 +3,24 @@ Start Symbol: <Program>
   Applying rule: Program -> StmtList
     StmtList -> Stmt StmtList_Tail
       Applying rule: Stmt -> Declaration
-        Applying rule: Declaration -> Type ID ;
+        Applying rule: Declaration -> Type ID [= Expression] ;
         Match terminal: 'int' (Type: KEYWORD)
-        Match terminal: 'x' (Type: ID)
-        Match terminal: ';' (Type: SYMBOL)
-    StmtList_Tail -> Stmt StmtList_Tail
-      Applying rule: Stmt -> Declaration
-        Applying rule: Declaration -> Type ID ;
-        Match terminal: 'int' (Type: KEYWORD)
-        Match terminal: 'y' (Type: ID)
-        Match terminal: ';' (Type: SYMBOL)
-    StmtList_Tail -> Stmt StmtList_Tail
-      Applying rule: Stmt -> Assignment ;
-        Applying rule: Assignment -> ID = Expression
         Match terminal: 'x' (Type: ID)
         Match terminal: '=' (Type: ASSIGN)
+        Detected initializer in declaration.
           Applying rule: Expression -> Term Expression'
             Applying rule: Term -> Factor Term'
               Applying rule: Factor -> NUMBER
               Match terminal: '5' (Type: NUMBER)
               Applying rule: Term' -> ε
             Applying rule: Expression' -> ε
-      Match terminal: ';' (Type: SYMBOL)
+        Match terminal: ';' (Type: SYMBOL)
+    StmtList_Tail -> Stmt StmtList_Tail
+      Applying rule: Stmt -> Declaration
+        Applying rule: Declaration -> Type ID [= Expression] ;
+        Match terminal: 'int' (Type: KEYWORD)
+        Match terminal: 'y' (Type: ID)
+        Match terminal: ';' (Type: SYMBOL)
     StmtList_Tail -> Stmt StmtList_Tail
       Applying rule: Stmt -> Assignment ;
         Applying rule: Assignment -> ID = Expression
@@ -67,7 +63,7 @@ Start Symbol: <Program>
       Match terminal: ';' (Type: SYMBOL)
     StmtList_Tail -> Stmt StmtList_Tail
       Applying rule: Stmt -> Declaration
-        Applying rule: Declaration -> Type ID ;
+        Applying rule: Declaration -> Type ID [= Expression] ;
         Match terminal: 'int' (Type: KEYWORD)
         Match terminal: 'i' (Type: ID)
         Match terminal: ';' (Type: SYMBOL)
@@ -120,7 +116,7 @@ Start Symbol: <Program>
         Match terminal: '{' (Type: SYMBOL)
           StmtList -> Stmt StmtList_Tail
             Applying rule: Stmt -> Declaration
-              Applying rule: Declaration -> Type ID ;
+              Applying rule: Declaration -> Type ID [= Expression] ;
               Match terminal: 'int' (Type: KEYWORD)
               Match terminal: 'temp' (Type: ID)
               Match terminal: ';' (Type: SYMBOL)
