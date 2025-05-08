@@ -51,9 +51,8 @@ def main():
         with open(symbol_table_file, 'w') as f:
             json.dump(symbol_table, f, indent=4)
         if semantic_errors:
-            with open(semantic_errors_file, 'w') as f:
-                for error in semantic_errors:
-                    f.write(f"- {error}\n")
+            for error in semantic_errors:
+                print(f"- {error}\n")
             print("Semantic errors found.", file=sys.stderr)
             sys.exit(1)
     except Exception as e:
