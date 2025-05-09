@@ -24,17 +24,36 @@ class TACOptimizer:
         return new_tac
 
     def constant_propagation(self, tac):
-        const_vals = {}
+        # First pass: collect all reassigned variables
+        reassigned = set()
+        assigned_once = {}
+
+        for instr in tac:
+            if instr['op'] == 'ASSIGN':
+                var = instr.get('result')
+                if var:
+                    if var in assigned_once:
+                        reassigned.add(var)
+                    else:
+                        assigned_once[var] = instr.get('arg1')
+
+        # Second pass: propagate only safe constants
+        const_vals = {var: val for var, val in assigned_once.items() if var not in reassigned}
         new_tac = []
+
         for instr in tac:
             instr = instr.copy()
-            if instr['op'] == 'ASSIGN' and isinstance(instr['arg1'], (int, float)):
-                const_vals[instr['result']] = instr['arg1']
+
             for key in ['arg1', 'arg2']:
-                if instr.get(key) in const_vals:
-                    instr[key] = const_vals[instr[key]]
+                val = instr.get(key)
+                if isinstance(val, str) and val in const_vals:
+                    instr[key] = const_vals[val]
+
             new_tac.append(instr)
+
         return new_tac
+
+
 
     def common_subexpression_elimination(self, tac):
         expr_map = {}
@@ -63,16 +82,33 @@ class TACOptimizer:
     def dead_code_elimination(self, tac):
         used = set()
         for instr in tac:
-            if instr.get('arg1') is not None:
+            if instr.get('arg1'):
                 used.add(instr['arg1'])
-            if instr.get('arg2') is not None:
+            if instr.get('arg2'):
                 used.add(instr['arg2'])
+            if instr['op'] in ['IF_FALSE', 'GOTO']:
+                if instr.get('result'):
+                    used.add(instr['result'])
 
         new_tac = []
         for instr in reversed(tac):
-            if instr['op'] == 'LABEL' or instr.get('result') in used or instr['op'] == 'ASSIGN':
+            op = instr['op']
+            result = instr.get('result')
+
+            # Always keep control flow or label
+            if op in ['LABEL', 'GOTO', 'IF_FALSE'] or (result and result in used):
                 new_tac.insert(0, instr)
+                if instr.get('arg1'):
+                    used.add(instr['arg1'])
+                if instr.get('arg2'):
+                    used.add(instr['arg2'])
+            elif op == 'ASSIGN' and result in used:
+                new_tac.insert(0, instr)
+                if instr.get('arg1'):
+                    used.add(instr['arg1'])
+
         return new_tac
+
 
     def op_to_symbol(self, op):
         return {'ADD': '+', 'SUB': '-', 'MUL': '*', 'DIV': '/'}[op]

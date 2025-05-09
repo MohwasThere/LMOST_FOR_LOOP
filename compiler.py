@@ -81,7 +81,10 @@ def main():
             elif op == "CONCAT":
                 return f"{i:03d}:  {res} = {a1} + {a2}"
             elif op in ["LT", "GT", "LE", "GE", "EQ", "NE"]:
-                return f"{i:03d}:  {op} {a1}, {a2}, {res}"
+                symbol = {"LT": "<", "GT": ">", "LE": "<=", "GE": ">=", "EQ": "==", "NE": "!="}.get(op, op)
+                return f"{i:03d}:  {res} = {a1} {symbol} {a2}"
+            elif op == "IF_FALSE":
+                return f"{i:03d}:  IF {a1} false goto {res}"
             else:
                 return f"{i:03d}:  {op} {a1}, {a2}, {res}"
 

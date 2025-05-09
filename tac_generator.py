@@ -71,7 +71,6 @@ class TACGenerator:
             fake_assignment = {"type": "Assignment", "var": node['var_name'], "expr": node['initializer']}
             self.visit_Assignment(fake_assignment)
 
-
     def visit_Assignment(self, node):
         var_name = node.get('var')
         expr_result_var = self.visit(node.get('expr')) 
@@ -80,6 +79,7 @@ class TACGenerator:
             self.add_instruction('ASSIGN', expr_result_var, None, var_name)
         else:
             print(f"Warning (TAC): Expression for assignment to '{var_name}' did not yield a result.", file=sys.stderr)
+            self.add_instruction('ASSIGN', 0, None, var_name)
         return None 
 
     def visit_BinaryExpr(self, node):
@@ -100,10 +100,10 @@ class TACGenerator:
             if op == '+' and (is_left_str or is_right_str):
                 self.add_instruction('CONCAT', left_result_var, right_result_var, result_temp)
             else: 
-                 self.add_instruction(tac_op_map[op], left_result_var, right_result_var, result_temp)
+                self.add_instruction(tac_op_map[op], left_result_var, right_result_var, result_temp)
         else:
             print(f"Warning (TAC): Unsupported binary operator '{op}' skipped in TAC generation.", file=sys.stderr)
-            return result_temp 
+            self.add_instruction('ASSIGN', 0, None, result_temp)
         return result_temp 
 
     def visit_UnaryExpr(self, node):
@@ -120,7 +120,6 @@ class TACGenerator:
         else:
             print(f"Warning (TAC): Unsupported unary operator '{op}' skipped.", file=sys.stderr)
             return operand_result_var 
-        return operand_result_var 
 
     def visit_Variable(self, node):
         return node.get('name')
@@ -162,33 +161,31 @@ class TACGenerator:
     def visit_Condition(self, node):
         left_result_var = self.visit(node.get('left'))
         right_result_var = self.visit(node.get('right'))
-        return (left_result_var, node.get('op'), right_result_var)
+        op = node.get('op')
+
+        cond_temp = self.new_temp()
+        rel_op_to_tac = {
+            '<': 'LT', '>': 'GT', '<=': 'LE', '>=': 'GE', '==': 'EQ', '!=': 'NE'
+        }
+
+        if op in rel_op_to_tac:
+            self.add_instruction(rel_op_to_tac[op], left_result_var, right_result_var, cond_temp)
+        else:
+            print(f"Warning (TAC): Unknown relational operator '{op}'", file=sys.stderr)
+            self.add_instruction('ASSIGN', 0, None, cond_temp)
+
+        return cond_temp
 
     def visit_ForLoop(self, node):
         if node.get('init'):
             self.visit(node.get('init')) 
         start_loop_label = self.new_label() 
-        body_label = self.new_label()       
         after_loop_label = self.new_label() 
-        self.add_instruction('LABEL', None, None, start_loop_label)
-        condition_parts = self.visit(node.get('condition'))
-        if condition_parts:
-            cond_left, cond_op, cond_right = condition_parts
-            cond_temp = self.new_temp()
-            rel_op_to_tac = {
-                '<': 'LT', '>': 'GT', '<=': 'LE', '>=': 'GE', '==': 'EQ', '!=': 'NE'
-            }
-            if cond_op in rel_op_to_tac:
-                self.add_instruction(rel_op_to_tac[cond_op], cond_left, cond_right, cond_temp)
-            else: 
-                print(f"Warning (TAC): Unknown relational operator '{cond_op}' in ForLoop condition.", file=sys.stderr)
-                self.add_instruction('ASSIGN', 0, None, cond_temp) 
-            self.add_instruction('IF_FALSE', cond_temp, None, after_loop_label)
-        else:
-             print("Warning (TAC): ForLoop condition is missing or invalid. Generating unconditional jump past loop.", file=sys.stderr)
-             self.add_instruction('GOTO', None, None, after_loop_label)
 
-        self.add_instruction('LABEL', None, None, body_label)
+        self.add_instruction('LABEL', None, None, start_loop_label)
+        cond_temp = self.visit(node.get('condition'))
+        self.add_instruction('IF_FALSE', cond_temp, None, after_loop_label)
+
         if node.get('body'):
             self.visit(node.get('body'))
         if node.get('update'):
