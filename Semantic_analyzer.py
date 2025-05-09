@@ -9,16 +9,10 @@ class SemanticAnalyzer:
         self.current_scope_level = 0 
 
     def analyze(self):
-        """
-        Analyzes the provided AST, populates the symbol table, and collects errors.
-        Returns:
-            tuple: (symbol_table, errors_list)
-        """
         self.visit(self.ast)
         return self.symbol_table, self.errors
 
     def visit(self, node):
-        """Recursively visits nodes in the AST."""
         if isinstance(node, list):
             for item in node:
                 self.visit(item)
@@ -34,18 +28,12 @@ class SemanticAnalyzer:
             print(f"Warning (Semantic Analyzer): Skipping unknown node structure: {type(node)} {str(node)[:100]}")
 
     def generic_visit(self, node):
-
-        """Generic visitor for dictionary nodes not handled by specific visitors."""
-
         if isinstance(node, dict):
             for key, value in node.items():
                 if isinstance(value, (dict, list)):
                     self.visit(value)
 
     def visit_Program(self, node):
-
-        """Visits the Program node."""
-
         self.visit(node.get('body', []))
 
     def visit_Declaration(self, node):
@@ -53,7 +41,6 @@ class SemanticAnalyzer:
         var_type = node.get("var_type")
         initializer = node.get("initializer", None)
 
-        # declare
         if var_name in self.declared_vars:
             self.errors.append(f"Semantic Error: Variable '{var_name}' already declared.")
         else:
@@ -62,17 +49,12 @@ class SemanticAnalyzer:
                 "type": var_type, "initialized": False, "value": None, "scope": self.current_scope_level
             }
 
-        # if initializer exists
         if initializer:
             fake_assignment = {"type": "Assignment", "var": var_name, "expr": initializer}
             self.visit_Assignment(fake_assignment)
 
 
     def visit_Assignment(self, node):
-
-        """Visits an Assignment node, checking types and variable declaration.
-           Updates variable's value in symbol table if assigned a literal."""
-        
         var_name = node.get("var")
         expression_node = node.get("expr")
 
@@ -148,7 +130,7 @@ class SemanticAnalyzer:
                 if py_type_ok:
                     self.symbol_table[var_name]["value"] = assigned_value
                 else:
-                    self.errors.append(f"Semantic Error: Literal value '{assigned_value}' (Python type: {type(assigned_value).__name__}) is not directly storable as declared type '{declared_type}' for variable '{var_name}'.")
+                    self.errors.append(f"Semantic Error: Literal value '{assigned_value}' is not directly storable as declared type '{declared_type}' for variable '{var_name}'.")
                     self.symbol_table[var_name]["value"] = None 
             else: 
                  self.symbol_table[var_name]["value"] = None
