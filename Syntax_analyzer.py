@@ -38,7 +38,7 @@ class SyntaxAnalyzer:
 
             if type_match and value_match:
                 if self.log_derivation_enabled:
-                     self.derivation_steps.append("  " * self.indent_level + f"Match terminal: '{token_value}' (Type: {token_type})")
+                     self.derivation_steps.append("  " * self.indent_level + f"Match: '{token_value}' (Type: {token_type})")
                 self.pos += 1
                 return token_value
         return None
@@ -68,6 +68,7 @@ class SyntaxAnalyzer:
                 self.derivation_steps.append("  " * self.indent_level + f"Warning: Parsing finished but tokens remain at pos {self.pos}: {self.tokens[self.pos:]}")
         self.indent_level -= 1
         return {"type": "Program", "body": program_body}
+    
 
     def parse_stmt_list(self):
         self.indent_level += 1
@@ -77,12 +78,12 @@ class SyntaxAnalyzer:
 
         while True:
             if self.pos >= len(self.tokens):
-                log_msg = "StmtList_Tail -> ε (end of input)" if parsed_at_least_one_stmt else "StmtList -> ε (end of input)"
+                log_msg = "StmtList -> ε (end of input)" if parsed_at_least_one_stmt else "StmtList -> ε (end of input)"
                 self._log(log_msg)
                 break
             current_type, current_token = self.current_token_info()
             if current_token == '}':
-                log_msg = "StmtList_Tail -> ε (found '}')" if parsed_at_least_one_stmt else "StmtList -> ε (found '}')"
+                log_msg = "StmtList -> ε (found '}')"
                 self._log(log_msg)
                 break
             
@@ -91,10 +92,10 @@ class SyntaxAnalyzer:
                              (current_type == 'ID')
 
             if not can_start_stmt:
-                log_msg = f"StmtList_Tail -> ε (token '{current_token}' cannot start Stmt)" if parsed_at_least_one_stmt else f"StmtList -> ε (token '{current_token}' cannot start Stmt)"
+                log_msg = f"StmtList -> ε (token '{current_token}' cannot start Stmt)"
                 self._log(log_msg)
                 break
-            log_msg_rule = "StmtList_Tail -> Stmt StmtList_Tail" if parsed_at_least_one_stmt else "StmtList -> Stmt StmtList_Tail"
+            log_msg_rule = "StmtList -> Stmt StmtList" 
             self._log(log_msg_rule)
             stmts.append(self.parse_stmt())
             parsed_at_least_one_stmt = True
@@ -118,7 +119,7 @@ class SyntaxAnalyzer:
             stmt_node = self.parse_assignment()
             self.expect('SYMBOL', ';')
         else:
-            err_msg = f"Unexpected token '{current_token}' ({current_type}) at position {self.pos}. Expected start of a statement (for, type, or ID)."
+            err_msg = f"Unexpected token '{current_token}' ({current_type}) at position {self.pos}. Expected(for, type, or ID)."
             if self.log_derivation_enabled:
                 self.derivation_steps.append("  " * self.indent_level + f"ERROR: {err_msg}")
             raise SyntaxError(err_msg)
@@ -127,7 +128,7 @@ class SyntaxAnalyzer:
 
     def parse_declaration(self):
         self.indent_level += 1
-        self._log("Applying rule: Declaration -> Type ID [= Expression] ;")
+        self._log("Applying rule: Declaration -> Type ID = Expr ;")
 
         var_type_token = self.expect('KEYWORD') 
         supported_types = ['int', 'float', 'string', 'double', 'char', 'bool']
@@ -178,7 +179,7 @@ class SyntaxAnalyzer:
 
     def parse_assignment(self):
         self.indent_level += 1
-        self._log("Applying rule: Assignment -> ID = Expression")
+        self._log("Applying rule: Assignment -> ID = Expr")
         var_name = self.expect('ID')
         self.expect('ASSIGN', '=')
         expr = self.parse_expression()
@@ -192,7 +193,7 @@ class SyntaxAnalyzer:
         
         current_type, current_token_val = self.current_token_info()
         if current_type == 'REL_OP':
-            self._log("Applying rule: Condition -> Expression RelOp Expression")
+            self._log("Applying rule: Condition -> Expr RelOp Expr")
             op = self.expect('REL_OP')
             right_expr = self.parse_expression()
             self.indent_level -= 1
@@ -200,7 +201,7 @@ class SyntaxAnalyzer:
         else:
             op = self.expect('REL_OP') 
             right_expr = self.parse_expression()
-            self._log("Applying rule: Condition -> Expression RelOp Expression") 
+            self._log("Applying rule: Condition -> Expr RelOp Expr") 
             self.indent_level -= 1
             return {"type": "Condition", "left": left_expr, "op": op, "right": right_expr}
 
@@ -214,7 +215,7 @@ class SyntaxAnalyzer:
             operand = self.parse_factor()
             node = {"type": "UnaryExpr", "op": "-", "operand": operand}
         elif self.match('SYMBOL', '('):
-            self._log("Applying rule: Factor -> ( Expression )")
+            self._log("Applying rule: Factor -> ( Expr )")
             node = self.parse_expression()
             self.expect('SYMBOL', ')')
         elif token_type == 'ID':
@@ -251,19 +252,19 @@ class SyntaxAnalyzer:
 
     def parse_term(self):
         self.indent_level += 1
-        self._log("Applying rule: Term -> Factor Term'")
+        self._log("Applying rule: Term -> Factor Term")
         node = self.parse_factor()
         temp_indent = self.indent_level 
         self.indent_level +=1 
         while True:
             current_type, token_value = self.current_token_info()
             if current_type == 'OP' and token_value in ['*', '/']: 
-                self._log(f"Applying rule: Term' -> {token_value} Factor Term'")
+                self._log(f"Applying rule: Term -> {token_value} Factor Term")
                 op = self.expect('OP', token_value)
                 right = self.parse_factor()
                 node = {"type": "BinaryExpr", "op": op, "left": node, "right": right}
             else:
-                self._log("Applying rule: Term' -> ε")
+                self._log("Applying rule: Term -> ε")
                 break
         self.indent_level = temp_indent
         self.indent_level -= 1
@@ -271,7 +272,7 @@ class SyntaxAnalyzer:
 
     def parse_expression(self):
         self.indent_level += 1
-        self._log("Applying rule: Expression -> Term Expression'") 
+        self._log("Applying rule: Expr -> Term Expr") 
         
         node = self.parse_term() 
 
@@ -280,12 +281,12 @@ class SyntaxAnalyzer:
         while True:
             current_type, token_value = self.current_token_info()
             if current_type == 'OP' and token_value in ['+', '-']:
-                self._log(f"Applying rule: Expression' -> {token_value} Term Expression'")
+                self._log(f"Applying rule: Expr -> {token_value} Term Expr")
                 op = self.expect('OP', token_value)
                 right = self.parse_term() 
                 node = {"type": "BinaryExpr", "op": op, "left": node, "right": right}
             else:
-                self._log("Applying rule: Expression' -> ε")
+                self._log("Applying rule: Expr -> ε")
                 break
         self.indent_level = temp_indent
 
@@ -302,25 +303,17 @@ class SyntaxAnalyzer:
             else: print(msg)
             return
 
-        log_header = "--- Leftmost Derivation Log ---"
-        log_footer = "------------------------------"
         log_content = self.derivation_steps if self.derivation_steps else ["No derivation steps were recorded."]
 
         if filename:
             try:
                 with open(filename, 'w') as f:
-                    f.write(log_header + "\n")
                     for step in log_content: f.write(step + "\n")
-                    f.write(log_footer + "\n")
             except IOError as e:
                 print(f"\nError saving derivation log to {filename}: {e}. Printing to console instead.")
-                print("\n" + log_header)
                 for step in log_content: print(step)
-                print(log_footer)
         else:
-            print("\n" + log_header)
             for step in log_content: print(step)
-            print(log_footer)
 
 def pretty_print_ast(ast, indent=0):
     prefix = '  ' * indent

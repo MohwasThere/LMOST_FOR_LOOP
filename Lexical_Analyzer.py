@@ -20,17 +20,6 @@ tok_regex = '|'.join(f'(?P<{pair[0]}>{pair[1]})' for pair in token_specification
 get_token = re.compile(tok_regex).match
 
 def lex(code):
-
-    """
-    Generates a stream of tokens from the input source code.
-    Args:
-        code (str): The source code string.
-    Yields:
-        tuple: A (token_kind, token_value) tuple for each token.
-    Raises:
-        SyntaxError: If an unexpected character is encountered.
-    """
-
     line_num = 1
     line_start = 0
     pos = 0

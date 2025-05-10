@@ -4,16 +4,20 @@
         {
             "type": "Declaration",
             "var_type": "int",
-            "var_name": "x",
-            "initializer": {
-                "type": "Number",
-                "value": "5"
-            }
+            "var_name": "x"
         },
         {
             "type": "Declaration",
             "var_type": "int",
             "var_name": "y"
+        },
+        {
+            "type": "Assignment",
+            "var": "x",
+            "expr": {
+                "type": "Number",
+                "value": "5"
+            }
         },
         {
             "type": "Assignment",

@@ -15,7 +15,6 @@ def main():
     derivation_log_file = "derivation_log.txt"
     ast_file = "AST.json"
     symbol_table_file = "symbol_table.json"
-    semantic_errors_file = "semantic_errors.txt"
     tac_file = "tac_optimized.txt"
     tac_original_file = "tac_original.txt"
 
@@ -23,7 +22,7 @@ def main():
         with open(input_file, 'r') as f:
             source_code = f.read()
     except FileNotFoundError:
-        print(f"Error: Input file '{input_file}' not found.", file=sys.stderr)
+        print(f"Error: file '{input_file}' not found.", file=sys.stderr)
         sys.exit(1)
 
     try:
@@ -62,6 +61,8 @@ def main():
     try:
         tac_generator = TACGenerator()
         tac, _ = tac_generator.generate(ast)
+        with open("tactable.json", 'w') as f:
+            json.dump(tac, f)
 
         def format_line(i, instr):
             op, a1, a2, res = instr['op'], instr.get('arg1',''), instr.get('arg2',''), instr.get('result','')
@@ -87,7 +88,7 @@ def main():
             else:
                 return f"{i:03d}:  {op} {a1}, {a2}, {res}"
 
-        original_lines = [".code"]
+        original_lines = []
         for i, instr in enumerate(tac):
             original_lines.append(format_line(i, instr))
         with open(tac_original_file, 'w') as f:
@@ -96,14 +97,14 @@ def main():
         optimizer = TACOptimizer(tac)
         optimized = optimizer.optimize()
 
-        final_lines = [".code"]
+        final_lines = []
         for i, instr in enumerate(optimized):
             final_lines.append(format_line(i, instr))
         with open(tac_file, 'w') as f:
             f.write('\n'.join(final_lines))
 
     except Exception as e:
-        print(f"TAC generation/optimization error: {e}", file=sys.stderr)
+        print(f"3AC error: {e}", file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":
